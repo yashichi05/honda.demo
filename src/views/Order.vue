@@ -370,7 +370,7 @@ setTimeout(() => {
   padding: 0 10px 50px
   > form
     display: grid
-    grid-template-columns: 400px 1fr 150px 200px 50px
+    grid-template-columns: 270px 1fr 150px 200px 50px
     grid-template-rows: 40px
     gap: 5px
     align-items: center

@@ -154,7 +154,7 @@ setTimeout(() => {
   min-height: 50vh
   > form
     display: grid
-    grid-template-columns: 400px 1fr 50px 150px 200px 50px
+    grid-template-columns: 270px 1fr 50px 150px 200px 50px
     grid-template-rows: 40px
     gap: 5px
     align-items: center

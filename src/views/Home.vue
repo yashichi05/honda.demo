@@ -88,7 +88,7 @@
   background: #fff
   > form
     display: grid
-    grid-template-columns: 400px 1fr
+    grid-template-columns: 270px 1fr
     grid-template-rows: 40px
     gap: 5px
     align-items: center
