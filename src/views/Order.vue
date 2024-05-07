@@ -210,19 +210,19 @@ setTimeout(() => {
       tbody
         tr
           td 使用人
-          td 
+          td ---------
           td 聯絡方式
-          td 
+          td ---------
         tr
           td 電話
-          td 
+          td ---------
           td 最後使用
-          td 
+          td ---------
         tr
           td 行動電話
-          td 
+          td ---------
           td 受雇人員
-          td
+          td ---------
     table.col-16
       thead
         tr.top
