@@ -5,6 +5,7 @@ import Schedule from '@/components/schedule.vue'
 
 const router = useRouter()
 const showDialog = ref(false)
+const loading = ref(true)
 
 const rows = [
   ['鈑噴', '', '後方鈑噴', '', '', '', '', '100%', '', '', '', '', '', ''],
@@ -113,6 +114,9 @@ function errHandler() {
 function openDialog() {
   showDialog.value = true
 }
+setTimeout(() => {
+  loading.value = false
+}, 1000)
 </script>
 
 <template lang="pug">
@@ -129,7 +133,8 @@ function openDialog() {
       option(value="1") 車主
     input
     button.submit
-  .tables-container 
+  table.loading.loading-table(v-if="loading")
+  .tables-container(v-else) 
     table.col-4
       thead
         tr.top
@@ -418,6 +423,8 @@ function openDialog() {
         background: url(@/assets/search.svg) #eee no-repeat center
         background-size: contain
         border: 1px solid #ccc
+  .loading-table
+    height: 500px
   .tables-container
     display: grid
     grid-template: 'a b' 'a c' 'd d' 'e e'

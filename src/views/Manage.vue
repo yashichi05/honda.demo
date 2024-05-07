@@ -27,9 +27,9 @@ const router = useRouter()
 
 const searchForm = reactive({ type: '0', text: '' })
 const currentSearch = ref('')
-const loading = ref(0)
+const loading = ref(1)
 
-const tableData = ref(_.cloneDeep(defaultData))
+const tableData = ref<typeof defaultData>([])
 const tableDataRender = computed(() => {
   return _.filter(tableData.value, i => i.key.includes(currentSearch.value))
 })
@@ -50,6 +50,10 @@ function refresh() {
 function errHandler() {
   router.push('/')
 }
+setTimeout(() => {
+  loading.value -= 1
+  tableData.value = _.cloneDeep(defaultData)
+}, 1000)
 </script>
 
 <template lang="pug">
@@ -126,6 +130,7 @@ function errHandler() {
 #manage
   background: #fff
   padding: 0 10px
+  min-height: 50vh
   > form
     display: grid
     grid-template-columns: 400px 1fr 50px 150px 200px 50px

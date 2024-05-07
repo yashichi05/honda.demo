@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
+import confirm from './confirmBox.vue'
 
 defineEmits<{ (e: 'close'): void }>()
 
 const loading = ref(true)
+const loadingMain = ref(false)
+const currentHour = ref(dayjs().hour())
+const confirmBox = reactive({
+  show: false,
+  data: [-1, -1, -1],
+})
 
 const workers = ref([
   {
@@ -33,7 +40,16 @@ function dragstartHandler(evt: DragEvent) {
   evt.dataTransfer.effectAllowed = 'move'
 }
 function dropHandler(...result: number[]) {
-  added.value = result
+  confirmBox.show = true
+  confirmBox.data = result
+}
+function confirmHandler() {
+  confirmBox.show = false
+  loadingMain.value = true
+  setTimeout(() => {
+    loadingMain.value = false
+    added.value = confirmBox.data
+  }, 1000)
 }
 
 setTimeout(() => {
@@ -59,6 +75,7 @@ setTimeout(() => {
       table.loading(v-if="loading")
       template(v-else)
         .main
+          confirm(v-if="confirmBox.show" @confirm="confirmHandler" @close="confirmBox.show = false")
           table
             thead
               tr.top
@@ -74,7 +91,7 @@ setTimeout(() => {
                 th 台數
                 th.time-ticks-title
                   section
-                    span(v-for="c in 10" :key="c")  {{ c }}
+                    span(v-for="c in 10" :key="c")  {{ currentHour + c - 6 }}
             tbody
               template(v-for="(i,wi) in workers" :key="i.category")
                 tr(v-for="(ppl,index) in i.list" :key="ppl")
@@ -86,7 +103,7 @@ setTimeout(() => {
                     section
                       span(v-for="c in 10" :key="c" @drag.prevent @dragmove.prevent @dragenter.prevent @dragend.prevent @dragleave.prevent @dragstart.prevent @dragover.prevent @drop.prevent="dropHandler(wi,index,c)")
                         i(v-if="wi === added[0] && index === added[1] && c === added[2]") {{ $route.query.key }} 葉志慶
-
+          table.loading-table.loading(v-if="loadingMain")
         .other
           table
             thead
@@ -116,7 +133,7 @@ setTimeout(() => {
                 th 承諾交車
                 th 工單號碼
                 th 交車方式
-                th 設備
+                th.device 設備
                 th.time-ticks-title
                   section
                     span(v-for="c in 10" :key="c")  {{ c }}
@@ -128,7 +145,18 @@ setTimeout(() => {
                 td 05-31 09:11
                 td.dragable(id="order-key" draggable="true" @dragstart="dragstartHandler") {{ $route.query.id }}
                 td 自行交車
-                td 047張忠謀
+                td.device 047張忠謀
+                td.time-ticks
+                  section
+                    span(v-for="c in 10" :key="c")
+              tr(v-for="i in 6" :key="i")
+                td
+                td
+                td
+                td
+                td
+                td
+                td.device 047張忠謀
                 td.time-ticks
                   section
                     span(v-for="c in 10" :key="c")
@@ -218,10 +246,18 @@ setTimeout(() => {
         width: 100%
         grid-area: c
         height: 500px
+      > .loading-table
+        grid-area: a
       > .main
         grid-area: a
         overflow: auto
         max-height: 400px
+        > .loading-table
+          background: none
+          position: fixed
+          left: 0
+          top: 0
+          height: 600px
         > table
           width: 100%
           font-weight: bold
@@ -260,8 +296,16 @@ setTimeout(() => {
             line-height: 3
       > .cars
         grid-area: c
+        th.device
+          background: linear-gradient(to top,#666,#aaa)
+          color: white
+        td.device
+          background: #ccc
+          color: white
         .dragable
           cursor: pointer
+        section
+          height: 40px
 
 th.time-ticks-title
   padding: 0
@@ -303,6 +347,7 @@ td.time-ticks
         // top: 0
         // left: 0
         white-space: nowrap
+        padding: 0 20px
 
 
 .right
