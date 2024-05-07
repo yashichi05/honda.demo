@@ -29,6 +29,7 @@ ul.menu
   gap: 5px
   box-shadow: 0 0 2px #666
   width: fit-content
+  z-index: 100
   > li
     cursor: pointer
     display: grid

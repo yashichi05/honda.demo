@@ -2,6 +2,7 @@
 import { computed, reactive, ref } from 'vue'
 import navMenu from '@/components/menu.vue'
 import dayjs from 'dayjs'
+import { useRouter } from 'vue-router'
 const showMenu = reactive({
   1: false,
   2: false,
@@ -10,6 +11,7 @@ const showMenu = reactive({
   5: false,
   6: false,
 })
+const router = useRouter()
 const currentTime = ref(Date.now())
 const menu1 = ref([
   { name: '車輛資料', key: 0 },
@@ -17,7 +19,15 @@ const menu1 = ref([
     name: '服務流程',
     key: 1,
     children: [
-      { name: '動態管制中心', key: '1-1' },
+      {
+        name: '動態管制中心',
+        key: '1-1',
+        props: {
+          onclick() {
+            router.push({ name: 'manage' })
+          },
+        },
+      },
       { name: '控工構成', key: '1-2' },
       { name: '預約形成', key: '1-3' },
       { name: '車輛資料', key: '1-4' },

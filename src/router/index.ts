@@ -8,6 +8,16 @@ const router = createRouter({
       name: 'home',
       component: () => import('../views/Home.vue'),
     },
+    {
+      path: '/manage',
+      name: 'manage',
+      component: () => import('../views/Manage.vue'),
+    },
+    {
+      path: '/order',
+      name: 'order',
+      component: () => import('../views/Order.vue'),
+    },
   ],
 })
 

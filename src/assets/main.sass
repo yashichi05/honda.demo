@@ -1,0 +1,31 @@
+@import './base.css'
+table
+  color: #4B0082
+  font-size: 18px
+  width: 100%
+  background: #fff
+  border-collapse: collapse
+  position: relative
+  &.loading::before
+    content: 'Waiting...'
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%,-50%) 
+    line-height: 2
+    border: 3px solid currentColor
+    padding: 0 10px 0 50px
+    background: url(@/assets/clock.svg) #fff no-repeat center left 10px
+    background-size: 30px
+  th,td
+    border: 2px solid #eee
+    padding: 0 5px
+  thead
+    font-size: 20px
+    font-weight: bold
+    > tr
+      background: #ddd
+      &.top
+        background: linear-gradient(to top,#666,#aaa)
+        color: white
+  tbody
