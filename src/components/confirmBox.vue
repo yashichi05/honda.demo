@@ -49,7 +49,7 @@ defineEmits<{ (e: 'close'): void; (e: 'confirm'): void }>()
   position: absolute
   background: #666
   z-index: 100
-  left: 980px
+  left: 50%
   bottom: 0
   > .title
     color: white

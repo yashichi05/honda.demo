@@ -106,7 +106,8 @@ setTimeout(() => {
         td(@click="errHandler")
         td(@click="errHandler").bg {{ i.key }}
         td(@click="errHandler") {{ i.owner }}
-        td(@click="errHandler").copy 
+        td(@click="errHandler")
+          span.copy 
         td(@click="errHandler")
           span.sp AA3
         td(@click="errHandler")
@@ -195,7 +196,9 @@ setTimeout(() => {
     .copy
       background: url(@/assets/copy.svg) no-repeat center
       background-size: 20px
-      width: 35px
+      width: 30px
+      height: 40px
+      display: block
       cursor: pointer
     .sp
       background: brown
