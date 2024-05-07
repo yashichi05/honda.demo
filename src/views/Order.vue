@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import Schedule from '@/components/schedule.vue'
 
 const router = useRouter()
+const showDialog = ref(false)
 
 const rows = [
   ['鈑噴', '', '後方鈑噴', '', '', '', '', '100%', '', '', '', '', '', ''],
@@ -107,11 +110,15 @@ const rows = [
 function errHandler() {
   router.push('/')
 }
-function openDialog() {}
+function openDialog() {
+  showDialog.value = true
+}
 </script>
 
 <template lang="pug">
 #order
+  transition(name="fade")
+    schedule(v-if="showDialog" @close="showDialog = false")
   form(@submit.prevent="submit")
     h1 維修狀態
       span [查詢模式]
