@@ -108,7 +108,7 @@ function errHandler() {
         td(@click="errHandler")
           span.sp I-0
         td(@click="errHandler") {{ i.type }}
-        td.bg(@click="$router.push({name:'order',query:{id:i.id}})") {{ i.id }}
+        td.bg(@click="$router.push({name:'order',query:i})") {{ i.id }}
         td(@click="errHandler") 維修中
         td
         td(@click="errHandler") 05-06 11:05

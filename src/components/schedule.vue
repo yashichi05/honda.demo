@@ -18,6 +18,7 @@ const workers = ref([
     list: ['洪仲秋', '朱自清', '李家同', '黃明智'],
   },
 ])
+const added = ref([-1, -1, -1])
 
 const timeStr = computed(() => {
   const d = dayjs()
@@ -25,6 +26,15 @@ const timeStr = computed(() => {
   const day = days[d.day()]
   return d.format(`YYYY-MM-DD   ${day}`)
 })
+
+function dragstartHandler(evt: DragEvent) {
+  if (!evt.dataTransfer) return
+  evt.dataTransfer.dropEffect = 'move'
+  evt.dataTransfer.effectAllowed = 'move'
+}
+function dropHandler(...result: number[]) {
+  added.value = result
+}
 
 setTimeout(() => {
   loading.value = false
@@ -54,9 +64,9 @@ setTimeout(() => {
               tr.top
                 th(colspan="4")
                 th
-                  i
+                  i.left
                   span {{ timeStr }}
-                  i
+                  i.right
               tr.top
                 th 部門
                 th 技師
@@ -66,7 +76,7 @@ setTimeout(() => {
                   section
                     span(v-for="c in 10" :key="c")  {{ c }}
             tbody
-              template(v-for="i in workers" :key="i.category")
+              template(v-for="(i,wi) in workers" :key="i.category")
                 tr(v-for="(ppl,index) in i.list" :key="ppl")
                   td {{ !index ?i.category:'' }}
                   td {{ ppl }}
@@ -74,7 +84,8 @@ setTimeout(() => {
                   td
                   td.time-ticks
                     section
-                      span(v-for="c in 10" :key="c")
+                      span(v-for="c in 10" :key="c" @drag.prevent @dragmove.prevent @dragenter.prevent @dragend.prevent @dragleave.prevent @dragstart.prevent @dragover.prevent @drop.prevent="dropHandler(wi,index,c)")
+                        i(v-if="wi === added[0] && index === added[1] && c === added[2]") {{ $route.query.key }} 葉志慶
 
         .other
           table
@@ -92,10 +103,35 @@ setTimeout(() => {
           table
             thead
               tr.top
-                th(colspan="2") 日期設定附位資料
+                th(colspan="6") 待派工
+                th
+                th 
+                  i.left
+                  span {{ timeStr }}
+                  i.right
               tr
+                th 牌照號碼
+                th 車主
+                th 開單時間
+                th 承諾交車
+                th 工單號碼
+                th 交車方式
                 th 設備
-                th 車輛 / 工單資料
+                th.time-ticks-title
+                  section
+                    span(v-for="c in 10" :key="c")  {{ c }}
+            tbody
+              tr
+                td {{ $route.query.key }}
+                td {{ $route.query.owner }}
+                td 05-02 09:11
+                td 05-31 09:11
+                td.dragable(id="order-key" draggable="true" @dragstart="dragstartHandler") {{ $route.query.id }}
+                td 自行交車
+                td 047張忠謀
+                td.time-ticks
+                  section
+                    span(v-for="c in 10" :key="c")
 
 </template>
 
@@ -200,27 +236,7 @@ setTimeout(() => {
             position: sticky
             top: 0
             background: #fff
-            th.time-ticks-title
-              padding: 0
-              > section
-                background: #eef
-                height: 34px
-                display: grid
-                grid-template-columns: repeat(10,1fr)
-                color: darkblue
-                border-bottom: 1px solid #aaa
-                > span
-                  text-align: center
-                  font-size: 16px
-                  position: relative
-                  &::before
-                    content: ''
-                    position: absolute
-                    bottom: 0
-                    left: 50%
-                    width: 2px
-                    height: 5px
-                    background: darkblue
+
 
 
           > tbody
@@ -230,17 +246,6 @@ setTimeout(() => {
 
               > td
                 line-height: 3
-                &.time-ticks
-                  padding: 0
-                  > section
-                    width: 100%
-                    min-width: 500px
-                    background: #fff
-                    height: 55px
-                    display: grid
-                    grid-template-columns: repeat(10,1fr)
-                    > span:nth-of-type(even)
-                      background: #f3f3f3
       > .other
         grid-area: b
         overflow: auto
@@ -255,4 +260,69 @@ setTimeout(() => {
             line-height: 3
       > .cars
         grid-area: c
+        .dragable
+          cursor: pointer
+
+th.time-ticks-title
+  padding: 0
+  > section
+    background: #eef
+    height: 34px
+    display: grid
+    grid-template-columns: repeat(10,1fr)
+    color: darkblue
+    border-bottom: 1px solid #aaa
+    > span
+      text-align: center
+      font-size: 16px
+      position: relative
+      &::before
+        content: ''
+        position: absolute
+        bottom: 0
+        left: 50%
+        width: 2px
+        height: 5px
+        background: darkblue
+
+td.time-ticks
+  padding: 0
+  > section
+    width: 100%
+    min-width: 500px
+    background: #fff
+    height: 55px
+    display: grid
+    grid-template-columns: repeat(10,1fr)
+    > span
+      // position: relative
+      &:nth-of-type(even)
+        background: #f3f3f3
+      > i
+        position: absolute
+        // top: 0
+        // left: 0
+        white-space: nowrap
+
+
+.right
+  width: 0
+  height: 0
+  display: inline-block
+  transform: scaleY(0.6)
+  vertical-align: middle
+  margin-left: 10px
+  border-top: 10px solid transparent
+  border-bottom: 10px solid transparent
+  border-left: 10px solid currentColor
+.left
+  width: 0
+  height: 0
+  display: inline-block
+  vertical-align: middle
+  transform: scaleY(0.6)
+  margin-right: 10px
+  border-top: 10px solid transparent
+  border-bottom: 10px solid transparent
+  border-right: 10px solid currentColor
 </style>
