@@ -25,6 +25,7 @@ const workers = ref([
     list: ['洪仲秋', '朱自清', '李家同', '黃明智'],
   },
 ])
+const mainLoadingFixY = ref(0)
 const added = ref([-1, -1, -1])
 
 const timeStr = computed(() => {
@@ -51,6 +52,11 @@ function confirmHandler() {
     added.value = confirmBox.data
   }, 1000)
 }
+function mainScrollHandler(evt: Event) {
+  if (evt.target instanceof HTMLElement) {
+    mainLoadingFixY.value = evt.target.scrollTop
+  }
+}
 
 setTimeout(() => {
   loading.value = false
@@ -74,9 +80,9 @@ setTimeout(() => {
         span 顯示所有
       table.loading(v-if="loading")
       template(v-else)
-        .main
+        .main(@scroll="mainScrollHandler")
           confirm(v-if="confirmBox.show" @confirm="confirmHandler" @close="confirmBox.show = false")
-          table
+          table(:class="{loading: loadingMain}")
             thead
               tr.top
                 th(colspan="4")
@@ -103,7 +109,6 @@ setTimeout(() => {
                     section
                       span(v-for="c in 10" :key="c" @drag.prevent @dragmove.prevent @dragenter.prevent @dragend.prevent @dragleave.prevent @dragstart.prevent @dragover.prevent @drop.prevent="dropHandler(wi,index,c)")
                         i(v-if="wi === added[0] && index === added[1] && c === added[2]") {{ $route.query.key }} 葉志慶
-          table.loading-table.loading(v-if="loadingMain")
         .other
           table
             thead
@@ -145,7 +150,7 @@ setTimeout(() => {
                 td 05-31 09:11
                 td.dragable(id="order-key" draggable="true" @dragstart="dragstartHandler") {{ $route.query.id }}
                 td 自行交車
-                td.device 047張忠謀
+                td.device 047 張忠謀
                 td.time-ticks
                   section
                     span(v-for="c in 10" :key="c")
@@ -156,7 +161,7 @@ setTimeout(() => {
                 td
                 td
                 td
-                td.device 047張忠謀
+                td.device 047 張忠謀
                 td.time-ticks
                   section
                     span(v-for="c in 10" :key="c")
@@ -246,18 +251,10 @@ setTimeout(() => {
         width: 100%
         grid-area: c
         height: 500px
-      > .loading-table
-        grid-area: a
       > .main
         grid-area: a
         overflow: auto
         max-height: 400px
-        > .loading-table
-          background: none
-          position: fixed
-          left: 0
-          top: 0
-          height: 600px
         > table
           width: 100%
           font-weight: bold
@@ -268,13 +265,14 @@ setTimeout(() => {
             right: 350px
             border-left: 2px dashed brown
             height: 100%
+          &::after
+            left: 70%
+            top: calc(200px + v-bind(mainLoadingFixY) * 1px)
           > thead
             position: sticky
             top: 0
             background: #fff
-
-
-
+            z-index: 1
           > tbody
             > tr
               &:nth-of-type(even)

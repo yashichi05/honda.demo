@@ -82,7 +82,7 @@ setInterval(() => {
 
 <template lang="pug">
 header
-  .logo
+  .logo(@click="$router.push('/')")
   .info
     span {{ timeStr }}
     span 奕勝美  北台中廠  使用者：葉志慶
@@ -127,6 +127,9 @@ header
   > .logo
     background: url(@/assets/honda.svg) no-repeat left 20px center
     background-size: 170px
+    cursor: pointer
+    justify-self: start
+    width: 300px
   > .info
     text-align: right
     display: grid

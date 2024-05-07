@@ -68,63 +68,80 @@ setTimeout(() => {
       option(value="1") 車主
     input(v-model="searchForm.text")
     button.submit
-  table(:class="{loading}")
-    thead
-      tr.top
-        th(colspan="9") 工單資訊(92/92)
-        th(colspan="8") 工單進度
-        th(colspan="5") 工單
-      tr
-        th #
-        th 警示
-        th 服務廠
-        th 區位
-        th 牌照號碼
-        th 車主
-        th 
-        th 貢獻
-        th 分類
-        th 類別
-        th 工單號碼
-        th 進度
-        th 理賠案號
-        th 開單時間
-        th 承諾交車
-        th 交車方式
-        th 金額
-        th 服務專員
-        th 承諾採購
-        th 維修人員
-        th 總計
-        th 進度
-    tbody
-      tr(v-for="(i,index) in tableDataRender" :key="index" :data-type="i.type")
-        td(@click="errHandler") {{ index+1 }}
-        td(@click="errHandler")
-          i(v-for="c in 3" :key="c")
-        td(@click="errHandler") 北台中廠
-        td(@click="errHandler")
-        td(@click="errHandler").bg {{ i.key }}
-        td(@click="errHandler") {{ i.owner }}
-        td(@click="errHandler")
-          span.copy 
-        td(@click="errHandler")
-          span.sp AA3
-        td(@click="errHandler")
-          span.sp I-0
-        td(@click="errHandler") {{ i.type }}
-        td.bg(@click="$router.push({name:'order',query:i})") {{ i.id }}
-        td(@click="errHandler") 維修中
-        td
-        td(@click="errHandler") 05-06 11:05
-        td(@click="errHandler") 05-07 11:05
-        td(@click="errHandler") 自行取車
-        td(@click="errHandler") 8,999
-        td.bg(@click="errHandler") 葉佩欣
-        td(@click="errHandler") 趙台麗
-        td(@click="errHandler") 蔡英文
-        td.bg-gray(@click="errHandler") 13223
-        td.bg-gray(@click="errHandler") 20%
+  .main
+    table(:class="{loading}")
+      thead
+        tr.top
+          th(colspan="9") 工單資訊(92/92)
+          th(colspan="8") 工單進度
+          th(colspan="5") 工單
+        tr
+          th #
+          th 警示
+          th 服務廠
+          th 區位
+          th 牌照號碼
+          th 車主
+          th 
+          th 貢獻
+          th 分類
+          th 類別
+          th 工單號碼
+          th 進度
+          th 理賠案號
+          th 開單時間
+          th 承諾交車
+          th 交車方式
+          th 金額
+          th 服務專員
+          th 承諾採購
+          th 維修人員
+          th 總計
+          th 進度
+      tbody
+        tr(v-for="(i,index) in tableDataRender" :key="index" :data-type="i.type")
+          td(@click="errHandler") {{ index+1 }}
+          td.balls(@click="errHandler")
+            i(v-for="c in 3" :key="c")
+          td(@click="errHandler") 北台中廠
+          td(@click="errHandler")
+          td(@click="errHandler").bg {{ i.key }}
+          td(@click="errHandler") {{ i.owner }}
+          td(@click="errHandler")
+            span.copy 
+          td(@click="errHandler")
+            span.sp AA3
+          td(@click="errHandler")
+            span.sp I-0
+          td(@click="errHandler") {{ i.type }}
+          td.bg(@click="$router.push({name:'order',query:i})") {{ i.id }}
+          td(@click="errHandler") 維修中
+          td
+          td(@click="errHandler") 05-06 11:05
+          td(@click="errHandler") 05-07 11:05
+          td(@click="errHandler") 自行取車
+          td(@click="errHandler") 8,999
+          td.bg(@click="errHandler") 葉佩欣
+          td(@click="errHandler") 趙台麗
+          td(@click="errHandler") 蔡英文
+          td.bg-gray(@click="errHandler") 13223
+          td.bg-gray(@click="errHandler") 20%
+  .others
+    table(v-for="i in 3" :key="i")
+      thead
+        tr.top
+          th(colspan="4") 預約
+        tr
+          th 牌照號碼
+          th 客戶名稱
+          th 時段
+          th 電話
+      tbody
+        tr(v-for="s in 10" :key="s")
+          td DDD-4555
+          td
+          td 07:00
+          td 0966687885
 </template>
 
 <style lang="sass" scoped>
@@ -179,30 +196,51 @@ setTimeout(() => {
         background: url(@/assets/search.svg) #eee no-repeat center
         background-size: contain
         border: 1px solid #ccc
-  table
-    .bg-gray
-      background: #eee
-    .bg
-      background: #E6E6FA
-    td
-      cursor: pointer
-      &:hover
-        transform: scale(1.05)
-        text-decoration: underline
-    tr[data-type='鈑噴保險']
-      color: gray
-      .bg
+  > .main
+    height: 350px
+    overflow: auto
+    table
+      thead
+        position: sticky
+        top: 0
+      .bg-gray
         background: #eee
-    .copy
-      background: url(@/assets/copy.svg) no-repeat center
-      background-size: 20px
-      width: 30px
-      height: 40px
-      display: block
-      cursor: pointer
-    .sp
-      background: brown
-      color: white
-      display: block
-      text-align: center
+      .bg
+        background: #E6E6FA
+      td
+        cursor: pointer
+        white-space: nowrap
+        &:hover
+          transform: scale(1.05)
+          text-decoration: underline
+        &.balls
+          text-align: center
+          > i
+            width: 30px
+            height: 30px
+            display: inline-block
+            background: red
+            border-radius: 50%
+            vertical-align: middle
+            margin-right: 10px
+      tr[data-type='鈑噴保險']
+        color: gray
+        .bg
+          background: #eee
+      .copy
+        background: url(@/assets/copy.svg) no-repeat center
+        background-size: 20px
+        width: 30px
+        height: 40px
+        display: block
+        cursor: pointer
+      .sp
+        background: brown
+        color: white
+        display: block
+        text-align: center
+  > .others
+    display: grid
+    gap: 5px
+    grid-template-columns: 1fr 1fr 1fr
 </style>
