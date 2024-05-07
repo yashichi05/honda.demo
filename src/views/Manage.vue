@@ -31,7 +31,10 @@ const loading = ref(1)
 
 const tableData = ref<typeof defaultData>([])
 const tableDataRender = computed(() => {
-  return _.filter(tableData.value, i => i.key.includes(currentSearch.value))
+  return _.chain(tableData.value)
+    .filter(i => i.key.includes(currentSearch.value))
+    .shuffle()
+    .value()
 })
 
 function submit() {

@@ -2,6 +2,7 @@
 import dayjs from 'dayjs'
 import { computed, reactive, ref } from 'vue'
 import confirm from './confirmBox.vue'
+import _ from 'lodash'
 
 defineEmits<{ (e: 'close'): void }>()
 
@@ -13,18 +14,23 @@ const confirmBox = reactive({
   data: [-1, -1, -1],
 })
 
-const workers = ref([
-  {
-    category: '北台中接待組',
-    list: ['詩文冰', '李白', '范仲淹', '盧秀燕', '孫中山', '陳進興', '陳金火'],
-  },
-  { category: '北台中板金組', list: ['黃興華', '賴瑞麟', '羅小淇', '陳昱洲', '洪俊哲', '葉志慶'] },
+const workers = ref(
+  _.shuffle([
+    {
+      category: '北台中接待組',
+      list: ['詩文冰', '李白', '范仲淹', '盧秀燕', '孫中山', '陳進興', '陳金火'],
+    },
+    {
+      category: '北台中板金組',
+      list: ['黃興華', '賴瑞麟', '羅小淇', '陳昱洲', '洪俊哲', '葉志慶'],
+    },
 
-  {
-    category: '北台中摸魚組',
-    list: ['洪仲秋', '朱自清', '李家同', '黃明智'],
-  },
-])
+    {
+      category: '北台中摸魚組',
+      list: ['洪仲秋', '朱自清', '李家同', '黃明智'],
+    },
+  ]),
+)
 const mainLoadingFixY = ref(0)
 const added = ref([-1, -1, -1])
 
