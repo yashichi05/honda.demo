@@ -125,7 +125,7 @@ setTimeout(() => {
                 th 車輛 / 工單資料
             tbody
               tr(v-for="i in 20" :key="i")
-                td 0702張忠謀
+                td 0702 張忠謀
                 td
         .cars
           table
