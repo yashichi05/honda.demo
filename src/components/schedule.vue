@@ -56,6 +56,11 @@ function dragstartHandler(evt: DragEvent) {
   evt.dataTransfer.effectAllowed = 'move'
 }
 function dropHandler(...result: number[]) {
+  const name = workers.value[result[0]]?.list[result[1]]
+  if (name !== '葉志慶') {
+    alert('你不是 ' + name)
+    return
+  }
   confirmBox.show = true
   confirmBox.data = result
 }
