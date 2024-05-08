@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { computed, reactive, ref, toRefs } from 'vue'
+import { computed, reactive, ref, toRefs, nextTick } from 'vue'
 import confirm from './confirmBox.vue'
 import _ from 'lodash'
 
@@ -8,6 +8,8 @@ defineEmits<{ (e: 'close'): void }>()
 
 const loading = ref(true)
 const loadingMain = ref(false)
+const currentTimeLineBaseX = ref(0)
+const currentTimeLineX = ref(0)
 const miniW = ref(document.querySelector('#app')?.offsetWidth || 0)
 const unsupportDrag = reactive({
   active: Boolean(navigator.platform.match(/Arm/i)),
@@ -95,6 +97,12 @@ function mouseupHandler() {
 
 setTimeout(() => {
   loading.value = false
+  nextTick(() => {
+    const el = document.querySelector('.time-ticks')
+    if (!el) return
+    currentTimeLineBaseX.value = el.offsetLeft
+    currentTimeLineX.value = el.offsetWidth * 0.58
+  })
 }, 1000)
 </script>
 
@@ -316,9 +324,11 @@ setTimeout(() => {
             content: ''
             position: absolute
             top: 0
-            right: 350px
+            left: calc(v-bind(currentTimeLineBaseX) * 1px)
             border-left: 2px dashed brown
             height: 100%
+            --x: calc(v-bind(currentTimeLineX) * 1px)
+            transform: translateX(var(--x))
           &::after
             left: 70%
             top: calc(200px + v-bind(mainLoadingFixY) * 1px)
