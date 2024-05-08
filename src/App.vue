@@ -24,6 +24,7 @@ const menu1 = ref([
         key: '1-1',
         props: {
           onclick() {
+            showMenu[1] = false
             router.push({ name: 'manage' })
           },
         },
@@ -88,26 +89,26 @@ header
     span 奕勝美  北台中廠  使用者：葉志慶
     span 192.168.0.1 / 10.10.201.1
 nav
-  div(@mouseleave="showMenu[3] = false" @click="showMenu[3] = true")
-    span 系統
+  div(@mouseleave="showMenu[3] = false")
+    span(@click="showMenu[3] = true") 系統
     nav-menu(v-if="showMenu[3]" :items="menu2")
-  div(@mouseleave="showMenu[4] = false" @click="showMenu[4] = true")
-    span 參數
+  div(@mouseleave="showMenu[4] = false")
+    span(@click="showMenu[4] = true") 參數
     nav-menu(v-if="showMenu[4]" :items="menu2")
-  div(@mouseleave="showMenu[1] = false" @click="showMenu[1] = true")
-    span 服務
+  div(@mouseleave="showMenu[1] = false")
+    span(@click="showMenu[1] = true") 服務
     nav-menu(v-if="showMenu[1]" :items="menu1")
-  div(@mouseleave="showMenu[2] = false" @click="showMenu[2] = true")
-    span 零件
+  div(@mouseleave="showMenu[2] = false")
+    span(click="showMenu[2] = true") 零件
     nav-menu(v-if="showMenu[2]" :items="menu2")
-  div(@mouseleave="showMenu[5] = false" @click="showMenu[5] = true")
-    span CR
+  div(@mouseleave="showMenu[5] = false")
+    span(@click="showMenu[5] = true") CR
     nav-menu(v-if="showMenu[5]" :items="menu2")
-  div(@mouseleave="showMenu[6] = false" @click="showMenu[6] = true")
-    span 財務
+  div(@mouseleave="showMenu[6] = false")
+    span(@click="showMenu[6] = true") 財務
     nav-menu(v-if="showMenu[6]" :items="menu2")
-  div(@mouseleave="showMenu[7] = false" @click="showMenu[7] = true")
-    span 報表
+  div(@mouseleave="showMenu[7] = false")
+    span(@click="showMenu[7] = true") 報表
     nav-menu(v-if="showMenu[7]" :items="menu2")
   div
     span 公佈欄
