@@ -5,12 +5,13 @@ import confirm from './confirmBox.vue'
 import _ from 'lodash'
 
 defineEmits<{ (e: 'close'): void }>()
+const root: HTMLElement | null = document.querySelector('#app')
 
 const loading = ref(true)
 const loadingMain = ref(false)
 const currentTimeLineBaseX = ref(0)
 const currentTimeLineX = ref(0)
-const miniW = ref(document.querySelector('#app')?.offsetWidth || 0)
+const miniW = ref(root?.offsetWidth || 0)
 const unsupportDrag = reactive({
   active: Boolean(navigator.platform.match(/Arm/i)),
   draging: false,
@@ -104,7 +105,7 @@ setTimeout(() => {
   loading.value = false
   nextTick(() => {
     const el = document.querySelector('.time-ticks')
-    if (!el) return
+    if (!(el instanceof HTMLElement)) return
     currentTimeLineBaseX.value = el.offsetLeft
     currentTimeLineX.value = el.offsetWidth * 0.58
   })
