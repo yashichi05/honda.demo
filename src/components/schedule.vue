@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, toRefs } from 'vue'
 import confirm from './confirmBox.vue'
 import _ from 'lodash'
 
@@ -8,6 +8,13 @@ defineEmits<{ (e: 'close'): void }>()
 
 const loading = ref(true)
 const loadingMain = ref(false)
+const miniW = ref(document.querySelector('#app')?.offsetWidth || 0)
+const unsupportDrag = reactive({
+  active: Boolean(navigator.platform.match(/Arm/i)),
+  draging: false,
+  pos: { x: 0, y: 0 },
+})
+const { x: floatX, y: floatY } = toRefs(unsupportDrag.pos)
 const currentHour = ref(dayjs().hour())
 const confirmBox = reactive({
   show: false,
@@ -50,6 +57,12 @@ function dropHandler(...result: number[]) {
   confirmBox.show = true
   confirmBox.data = result
 }
+function mouseupHandler2(...result: number[]) {
+  if (!unsupportDrag.active) return
+  if (!unsupportDrag.draging) return
+  mouseupHandler()
+  dropHandler(...result)
+}
 function confirmHandler() {
   confirmBox.show = false
   loadingMain.value = true
@@ -63,6 +76,22 @@ function mainScrollHandler(evt: Event) {
     mainLoadingFixY.value = evt.target.scrollTop
   }
 }
+function mousedownHandler() {
+  if (!unsupportDrag.active) return
+  unsupportDrag.draging = true
+}
+function mousemoveHandler(evt: MouseEvent) {
+  if (!unsupportDrag.active) return
+  if (!unsupportDrag.draging) return
+  unsupportDrag.pos.x = evt.pageX
+  unsupportDrag.pos.y = evt.pageY
+}
+function mouseupHandler() {
+  if (!unsupportDrag.active) return
+  unsupportDrag.draging = false
+  unsupportDrag.pos.x = 0
+  unsupportDrag.pos.y = 0
+}
 
 setTimeout(() => {
   loading.value = false
@@ -70,7 +99,8 @@ setTimeout(() => {
 </script>
 
 <template lang="pug">
-#schedule(@click.self="$emit('close')")
+#schedule(@click.self="$emit('close')" @mouseup="mouseupHandler" @mousemove="mousemoveHandler")
+  .float(v-if="unsupportDrag.draging") B24050085158
   .window
     .title
       span 維修指派作業
@@ -113,7 +143,14 @@ setTimeout(() => {
                   td
                   td.time-ticks
                     section
-                      span(v-for="c in 10" :key="c" @drag.prevent @dragmove.prevent @dragenter.prevent @dragend.prevent @dragleave.prevent @dragstart.prevent @dragover.prevent @drop.prevent="dropHandler(wi,index,c)")
+                      span(
+                        v-for="c in 10" :key="c" 
+                        @drag.prevent @dragmove.prevent 
+                        @dragenter.prevent @dragend.prevent 
+                        @dragleave.prevent @dragstart.prevent 
+                        @dragover.prevent @drop.prevent="dropHandler(wi,index,c)"
+                        @mouseup.prevent="mouseupHandler2(wi,index,c)"
+                      )
                         i(v-if="wi === added[0] && index === added[1] && c === added[2]") {{ $route.query.key }} 葉志慶
         .other
           table
@@ -154,7 +191,7 @@ setTimeout(() => {
                 td {{ $route.query.owner }}
                 td 05-02 09:11
                 td 05-31 09:11
-                td.dragable(id="order-key" draggable="true" @dragstart="dragstartHandler") {{ $route.query.id }}
+                td.dragable(id="order-key" draggable="true" @dragstart="dragstartHandler" @mousedown="mousedownHandler") {{ $route.query.id }}
                 td 自行交車
                 td.device 047 張忠謀
                 td.time-ticks
@@ -183,6 +220,17 @@ setTimeout(() => {
   width: 100%
   height: 100%
   min-height: 1000px
+  min-width: calc(v-bind(miniW) * 1px)
+  .float
+    background: #fff
+    padding: 0 5px
+    pointer-events: none
+    font-size: 16px
+    position: absolute
+    left: calc(v-bind(floatX) * 1px)
+    top: calc(v-bind(floatY) * 1px)
+    color: darkblue
+    z-index: 1
   > .window
     position: absolute
     left: 50%
